@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Specify the character encoding for the HTML document -->
+    <meta charset="UTF-8">
+    
+    <!-- Ensure proper rendering and touch zooming for all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Set the title of the page -->
+    <title>Country Search</title>
+    
+    <style>
+        /* Apply styles to the body of the document */
+        body {
+            font-family: Arial, sans-serif; /* Set the default font */
+            max-width: 600px; /* Limit the width of the content */
+            margin: 0 auto; /* Center the content horizontally */
+            padding: 20px; /* Add some space around the content */
+        }
+        
+        /* Style the main heading */
+        h1 {
+            color: #333; /* Set the color of the heading */
+        }
+        
+        /* Style the search input field */
+        #search {
+            width: 100%; /* Make the input field full width */
+            padding: 10px; /* Add some internal spacing */
+            font-size: 16px; /* Set the font size */
+            margin-bottom: 20px; /* Add space below the input */
+        }
+        
+        /* Style the list that will contain the search results */
+        #results {
+            list-style-type: none; /* Remove default list bullets */
+            padding: 0; /* Remove default padding */
+        }
+        
+        /* Style each item in the results list */
+        #results li {
+            background-color: #f0f0f0; /* Light gray background */
+            margin-bottom: 5px; /* Space between items */
+            padding: 10px; /* Internal spacing */
+            border-radius: 5px; /* Rounded corners */
+        }
+    </style>
+</head>
+<body>
+    <!-- Main heading for the page -->
+    <h1>Country Search</h1>
+    
+    <!-- Input field for searching countries -->
+    <input type="text" id="search" placeholder="Search for a country...">
+    
+    <!-- Unordered list to display search results -->
+    <ul id="results"></ul>
+    
+    <script>
+        // Get references to the search input and results list elements
+        const searchInput = document.getElementById('search');
+        const resultsList = document.getElementById('results');
+        
+        // Add an event listener to the search input
+        searchInput.addEventListener('input', function() {
+            // Get the current value of the search input
+            const searchTerm = this.value;
+            
+            // Make an AJAX request to the server
+            fetch(`search.php?search=${encodeURIComponent(searchTerm)}`)
+                .then(response => response.json()) // Parse the JSON response
+                .then(data => {
+                    // Clear any existing results
+                    resultsList.innerHTML = '';
+                    
+                    // Loop through the returned countries and add them to the results list
+                    data.forEach(country => {
+                        const li = document.createElement('li');
+                        li.textContent = country;
+                        resultsList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Error:', error)); // Log any errors
+        });
+    </script>
+</body>
+</html>
